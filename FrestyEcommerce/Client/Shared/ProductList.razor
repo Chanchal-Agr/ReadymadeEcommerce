@@ -65,6 +65,6 @@ else
             return variants[0].Price.ToString();
 
         decimal minPrice = variants.Min(v => v.Price);
-        return $"Starting at {minPrice}";
+        return $"Starting at ₹ {minPrice}";
     }
 }
