@@ -28,5 +28,9 @@
     <ProjectReference Include="..\Shared\FrestyEcommerce.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 
 </Project>

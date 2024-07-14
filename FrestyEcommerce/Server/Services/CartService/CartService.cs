@@ -1,5 +1,4 @@
-﻿using FrestyEcommerce.Server.Migrations;
-using FrestyEcommerce.Shared.Dtos;
+﻿using FrestyEcommerce.Shared.Dtos;
 using FrestyEcommerce.Shared.Entities;
 using System.Security.Claims;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,7 @@ namespace FrestyEcommerce.Shared.Entities
         public string State { get; set; } = string.Empty;
         public string Zip { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
+        [ForeignKey("UserId")]
+        public User User { get; set; }
     }
 }
