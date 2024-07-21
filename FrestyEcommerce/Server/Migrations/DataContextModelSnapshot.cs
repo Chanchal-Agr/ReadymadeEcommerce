@@ -102,10 +102,6 @@ namespace FrestyEcommerce.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Visible")
                         .HasColumnType("bit");
 

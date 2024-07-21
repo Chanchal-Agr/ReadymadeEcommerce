@@ -1,11 +1,11 @@
 ﻿@page "/"
 @page "/search/{searchText}/{page:int}"
-@page "/{categoryUrl}"
+@page "/{categoryId:int}"
 @inject IProductService ProductService
 
-<PageTitle>Fresty Store</PageTitle>
+<PageTitle>Readymade</PageTitle>
 
-@if (SearchText == null && CategoryUrl == null)
+@if (SearchText == null && CategoryId == 0)
 {
     <FeaturedProducts />
 }
@@ -15,8 +15,11 @@ else
 }
 
 @code {
+    // [Parameter]
+    // public string? CategoryUrl { get; set; } = null;
+
     [Parameter]
-    public string? CategoryUrl { get; set; } = null;
+    public int CategoryId { get; set; } = 0;
 
     [Parameter]
     public string? SearchText { get; set; } = null;
@@ -32,7 +35,7 @@ else
         }
         else
         {
-            await ProductService.GetProducts(CategoryUrl);
+            await ProductService.GetProducts(CategoryId);
         }
     }
 }

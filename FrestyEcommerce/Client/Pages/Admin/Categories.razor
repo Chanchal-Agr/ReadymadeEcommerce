@@ -7,7 +7,6 @@
 
 <div class="header">
     <div class="col">Name</div>
-    <div class="col">Url</div>
     <div class="col">Visible</div>
     <div class="col"></div>
 </div>
@@ -21,9 +20,7 @@
                 <div class="col">
                     <InputText @bind-Value="editingCategory.Name" class="form-control"></InputText>
                 </div>
-                <div class="col">
-                    <InputText @bind-Value="editingCategory.Url" class="form-control"></InputText>
-                </div>
+           
                 <div class="col col-visible">
                     <InputCheckbox @bind-Value="editingCategory.Visible" style="transform:scale(1.5,1.5);"></InputCheckbox>
                 </div>
@@ -41,11 +38,8 @@
     else
     {
         <div class="row">
-            <div class="col">
+            <div class="col col-visible">
                 @category.Name
-            </div>
-            <div class="col">
-                @category.Url
             </div>
             <div class="col col-visible">
                 <span>@(category.Visible ? "✔️" : "")</span>
@@ -67,7 +61,7 @@
 
 @code {
     Category editingCategory = null;
-
+ 
     protected override async Task OnInitializedAsync()
     {
         await CategoryService.GetAdminCategories();

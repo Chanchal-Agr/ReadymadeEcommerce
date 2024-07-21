@@ -50,11 +50,11 @@ namespace FrestyEcommerce.Client.Services.ProductService
             return result;
         }
 
-        public async Task GetProducts(string? categoryUrl = null)
+        public async Task GetProducts(int categoryId = 0)
         {
-            var result = categoryUrl == null ?
+            var result = categoryId == 0 ?
                 await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/product/featured")
-                : await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryUrl}");
+                : await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/category/{categoryId}");
             if (result != null && result.Data != null)
                 Products = result.Data;
 

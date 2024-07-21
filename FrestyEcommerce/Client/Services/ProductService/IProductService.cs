@@ -11,7 +11,7 @@ namespace FrestyEcommerce.Client.Services.ProductService
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
         public string LastSearchText { get; set; }
-        Task GetProducts(string? categoryUrl = null);
+        Task GetProducts(int categoryId = 0);
         Task<ServiceResponse<Product>> GetProduct(int productId);
         Task SearchProducts(string searchText, int page);
         Task<List<string>> GetProductSearchSuggestions(string searchText);

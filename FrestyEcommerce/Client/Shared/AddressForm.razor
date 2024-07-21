@@ -3,9 +3,9 @@
 @if (address == null)
 {
     <span>
-        @* You have not specified a delivery address, yet. *@
-        Complete your profile
-        <button class="btn" @onclick="InitAddress">Add an address?</button>
+        You have not completed your profile, yet.
+        <br />
+        <button type="button" class="btn btn-link" @onclick="InitAddress">Complete your profile</button>
     </span>
 }
 else if (!editAddress)

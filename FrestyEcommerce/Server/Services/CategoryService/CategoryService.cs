@@ -14,6 +14,7 @@ namespace FrestyEcommerce.Server.Services.CategoryService
         public async Task<ServiceResponse<List<Category>>> AddCategory(Category category)
         {
             category.Editing = category.IsNew = false;
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
             return await GetAdminCategories();
@@ -62,7 +63,6 @@ namespace FrestyEcommerce.Server.Services.CategoryService
             if (dbCategory == null)
                 return new ServiceResponse<List<Category>> { Success = false, Message = "Category not found." };
             dbCategory.Name = category.Name;
-            dbCategory.Url = category.Url;
             dbCategory.Visible = category.Visible;
 
             await _context.SaveChangesAsync();

@@ -19,6 +19,6 @@ namespace FrestyEcommerce.Shared.Entities
         public string Zip { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

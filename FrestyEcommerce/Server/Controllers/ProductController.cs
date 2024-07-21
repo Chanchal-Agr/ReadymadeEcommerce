@@ -60,10 +60,10 @@ namespace FrestyEcommerce.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("category/{categoryUrl}")]
-        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductByCategory(string categoryUrl)
+        [HttpGet("category/{categoryId}")]
+        public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProductByCategory(int categoryId)
         {
-            var result = await _productService.GetProductsByCategoryAsync(categoryUrl);
+            var result = await _productService.GetProductsByCategoryAsync(categoryId);
             return Ok(result);
         }
 
