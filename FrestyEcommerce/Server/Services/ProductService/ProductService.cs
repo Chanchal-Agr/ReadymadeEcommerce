@@ -230,6 +230,8 @@ namespace FrestyEcommerce.Server.Services.ProductService
         public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
         {
             var dbProduct = await _context.Products.FindAsync(productId);
+            var variants = await _context.ProductVariants.Where(x=>x.ProductId==productId).ExecuteUpdateAsync(y=>y.SetProperty(x=>x.Deleted,false));
+
             if (dbProduct == null)
             {
                 return new ServiceResponse<bool> { Success = false, Data = false, Message = "Product not found." };

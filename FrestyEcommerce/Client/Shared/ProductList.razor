@@ -61,8 +61,11 @@ else
         if(variants.Count == 0)
             return string.Empty;
 
-        if(variants.Count == 1)
-            return variants[0].Price.ToString();
+        if (variants.Count == 1) 
+        {
+            var price = variants[0].Price.ToString();
+            return $"₹ {price}";
+        }
 
         decimal minPrice = variants.Min(v => v.Price);
         return $"Starting at ₹ {minPrice}";

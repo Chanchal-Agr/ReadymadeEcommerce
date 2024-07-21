@@ -74,29 +74,36 @@ namespace FrestyEcommerce.Server.Services.OrderService
 
         public async Task<ServiceResponse<List<OrderOverviewResponseDto>>> GetOrders()
         {
-            var response = new ServiceResponse<List<OrderOverviewResponseDto>>();
-            var orders = await _context.Orders
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Product)
-                .Where(o => o.UserId == _authService.GetUserId())
-                .OrderByDescending(o => o.OrderDate)
-                .ToListAsync();
-
-            var orderResponse = new List<OrderOverviewResponseDto>();
-            orders.ForEach(o => orderResponse.Add(new OrderOverviewResponseDto
+            try
             {
-                Id = o.Id,
-                OrderNumber = $"RM{o.Id.ToString().PadLeft(4, '0')}",
-                OrderDate = o.OrderDate,
-                TotalPrice = o.TotalPrice,
-                Product = o.OrderItems.Count > 1 ? $"{o.OrderItems.First().Product.Title} and {o.OrderItems.Count - 1} more..."
-                        : o.OrderItems.First().Product.Title,
-                ProductImageUrl = o.OrderItems.First().Product.ImageUrl
-            }));
+                var response = new ServiceResponse<List<OrderOverviewResponseDto>>();
+                var orders = await _context.Orders
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                    .Where(o => o.UserId == _authService.GetUserId())
+                    .OrderByDescending(o => o.OrderDate)
+                    .ToListAsync();
 
-            response.Data = orderResponse;
+                var orderResponse = new List<OrderOverviewResponseDto>();
+                orders.ForEach(o => orderResponse.Add(new OrderOverviewResponseDto
+                {
+                    Id = o.Id,
+                    //OrderNumber = $"RM{o.Id.ToString().PadLeft(4, '0')}",
+                    OrderDate = o.OrderDate,
+                    TotalPrice = o.TotalPrice,
+                    Product = o.OrderItems.Count > 1 ? $"{o.OrderItems.First().Product.Title} and {o.OrderItems.Count - 1} more..."
+                            : o.OrderItems.First().Product.Title,
+                    ProductImageUrl = o.OrderItems.First().Product.ImageUrl
+                }));
 
-            return response;
+                response.Data = orderResponse;
+
+                return response;
+            }
+            catch (Exception ex) 
+            {
+                return new ServiceResponse<List<OrderOverviewResponseDto>>(); ;
+            }
         }
 
         public async Task<ServiceResponse<bool>> PlaceOrder()
