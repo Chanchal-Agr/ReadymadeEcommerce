@@ -76,7 +76,7 @@ namespace FrestyEcommerce.Server.Services.PaymentService
                 {
                     var session = stripeEvent.Data.Object as Session;
                     var user = await _authService.GetUserByEmail(session.CustomerEmail);
-                    await _orderService.PlaceOrder(user.Id);
+                    await _orderService.PlaceOrder();
                 }
 
                 return new ServiceResponse<bool> { Data = true };

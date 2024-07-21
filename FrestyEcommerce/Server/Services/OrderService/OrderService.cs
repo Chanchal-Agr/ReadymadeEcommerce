@@ -1,6 +1,9 @@
-﻿using FrestyEcommerce.Shared.Dtos;
+﻿using FrestyEcommerce.Client.Pages;
+using FrestyEcommerce.Shared.Dtos;
 using FrestyEcommerce.Shared.Entities;
 using System.Security.Claims;
+using static MudBlazor.CategoryTypes;
+using static MudBlazor.FilterOperator;
 
 namespace FrestyEcommerce.Server.Services.OrderService
 {
@@ -29,15 +32,24 @@ namespace FrestyEcommerce.Server.Services.OrderService
                 .OrderByDescending(o => o.OrderDate)
                 .FirstOrDefaultAsync();
 
-            if(order == null)
+            var prices = await this._context.ProductVariants.Where(x => order.OrderItems.Select(y => y.ProductId).Contains(x.ProductId) && order.OrderItems.Select(y => y.ProductTypeId).Contains(x.ProductTypeId)).Select(x => new ProductVariant
+            {
+                ProductTypeId = x.ProductTypeId,
+                ProductId = x.ProductId,
+                OriginalPrice = x.OriginalPrice
+            }).ToListAsync();
+
+            if (order == null)
             {
                 response.Success = false;
                 response.Message = "Order not found.";
                 return response;
             }
-
+            string number = order.Id.ToString().PadLeft(4, '0');
+            number = $"RM{number}";
             var orderDetailsResponse = new OrderDetailsResponseDto
             {
+                OrderNumber = number,
                 OrderDate = order.OrderDate,
                 TotalPrice = order.TotalPrice,
                 Products = new List<OrderDetailsProductResponseDto>()
@@ -50,8 +62,10 @@ namespace FrestyEcommerce.Server.Services.OrderService
                 ProductType = item.ProductType.Name,
                 Quantity = item.Quantity,
                 Title = item.Product.Title,
-                TotalPrice = item.TotalPrice
+                TotalPrice = item.TotalPrice,
+                UnitPrice = prices.First(x => x.ProductId == item.ProductId && x.ProductTypeId == item.ProductTypeId).OriginalPrice
             }));
+
 
             response.Data = orderDetailsResponse;
 
@@ -72,6 +86,7 @@ namespace FrestyEcommerce.Server.Services.OrderService
             orders.ForEach(o => orderResponse.Add(new OrderOverviewResponseDto
             {
                 Id = o.Id,
+                OrderNumber = $"RM{o.Id.ToString().PadLeft(4, '0')}",
                 OrderDate = o.OrderDate,
                 TotalPrice = o.TotalPrice,
                 Product = o.OrderItems.Count > 1 ? $"{o.OrderItems.First().Product.Title} and {o.OrderItems.Count - 1} more..."
@@ -84,8 +99,9 @@ namespace FrestyEcommerce.Server.Services.OrderService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> PlaceOrder(int userId)
+        public async Task<ServiceResponse<bool>> PlaceOrder()
         {
+            int userId= _authService.GetUserId();
             var products = (await _cartService.GetDbCartProducts(userId)).Data;
             decimal totalPrice = 0;
             products.ForEach(product => totalPrice += product.Price * product.Quantity);
@@ -102,7 +118,7 @@ namespace FrestyEcommerce.Server.Services.OrderService
             var order = new Order
             {
                 UserId = userId,
-                OrderDate = DateTime.Now,
+                OrderDate = System.DateTime.Now,
                 TotalPrice = totalPrice,
                 OrderItems = orderItems
             };
@@ -112,6 +128,8 @@ namespace FrestyEcommerce.Server.Services.OrderService
             _context.CartItems.RemoveRange(_context.CartItems.Where(ci => ci.UserId == userId));
 
             await _context.SaveChangesAsync();
+
+            string orderNumber = $"RM{order.Id.ToString().PadLeft(4, '0')}";
 
             return new ServiceResponse<bool> { Data = true };
         }

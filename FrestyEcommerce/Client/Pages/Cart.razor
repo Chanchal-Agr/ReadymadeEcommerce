@@ -33,11 +33,11 @@ else
                         Delete
                     </button>
                 </div>
-                <div class="cart-product-price">$@(product.Price * product.Quantity)</div>
+                <div class="cart-product-price">₹@(product.Price * product.Quantity)</div>
             </div>
         }
         <div class="cart-product-price">
-            Total (@cartProducts.Count): $@cartProducts.Sum(product => @product.Price * product.Quantity)
+            Total (@cartProducts.Count): ₹@cartProducts.Sum(product => @product.Price * product.Quantity)
         </div>
     </div>
     @if (isAuthenticated)
@@ -47,51 +47,8 @@ else
             <AddressForm />
         </div>
     }
-    <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Checkout</button>
+    <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Place Order</button>
+    
 }
 
-@code {
-    List<CartProductResponseDto> cartProducts = null;
-    string message = "Loading cart...";
-    bool isAuthenticated = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        isAuthenticated = await AuthService.IsUserAuthenticated();
-        await LoadCart();
-    }
-
-    private async Task RemovProductFromCart(int productId, int prodctTypeId)
-    {
-        await CartService.RemoveProductFromCart(productId, prodctTypeId);
-        await LoadCart();
-    }
-
-    private async Task LoadCart()
-    {
-        await CartService.GetCartItemsCount();
-        cartProducts = await CartService.GetCartProducts();
-
-        if (cartProducts == null || cartProducts.Count == 0)
-        {
-            message = "Your cart is empty.";
-            cartProducts = new List<CartProductResponseDto>();
-        }
-    }
-
-    private async Task UpdateQuantity(ChangeEventArgs e, CartProductResponseDto product)
-    {
-        product.Quantity = int.Parse(e.Value.ToString());
-        if (product.Quantity < 1)
-        {
-            product.Quantity = 1;
-        }
-        await CartService.UpdateQuantity(product);
-    }
-
-    private async Task PlaceOrder()
-    {
-        string url = await OrderService.PlaceOrder();
-        NavigationManager.NavigateTo(url);
-    }
-}

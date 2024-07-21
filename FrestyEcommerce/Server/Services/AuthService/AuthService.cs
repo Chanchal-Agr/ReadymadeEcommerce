@@ -142,5 +142,7 @@ namespace FrestyEcommerce.Server.Services.AuthService
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
         }
+
+      
     }
 }

@@ -14,5 +14,6 @@ namespace FrestyEcommerce.Shared.Dtos
         public string ImageUrl { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal UnitPrice {  get; set; }
     }
 }

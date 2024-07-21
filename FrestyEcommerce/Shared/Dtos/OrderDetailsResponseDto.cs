@@ -8,6 +8,7 @@ namespace FrestyEcommerce.Shared.Dtos
 {
     public class OrderDetailsResponseDto
     {
+        public string OrderNumber {  get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
         public List<OrderDetailsProductResponseDto> Products { get; set; }

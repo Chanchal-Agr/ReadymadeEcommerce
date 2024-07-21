@@ -9,12 +9,15 @@ namespace FrestyEcommerce.Client.Services.OrderService
         private readonly HttpClient _http;
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly NavigationManager _navigationManager;
+        private readonly IAuthService _authService;
 
-        public OrderService(HttpClient http, AuthenticationStateProvider authStateProvider, NavigationManager navigationManager)
+        public OrderService(HttpClient http, AuthenticationStateProvider authStateProvider, NavigationManager navigationManager, IAuthService authService)
         {
             _http = http;
             _authStateProvider = authStateProvider;
             _navigationManager = navigationManager;
+            _authService = authService;
+
         }
 
         public async Task<OrderDetailsResponseDto> GetOrderDetails(int orderId)
@@ -29,18 +32,15 @@ namespace FrestyEcommerce.Client.Services.OrderService
             return result.Data;
         }
 
-        public async Task<string> PlaceOrder()
+        public async Task<bool> PlaceOrder()
         {
-            if(await IsUserAuthenticated())
+            if (await IsUserAuthenticated())
             {
-                var result = await _http.PostAsync("api/payment/checkout", null);
-                var url = await result.Content.ReadAsStringAsync();
-                return url;
+                var result = await _http.PostAsync("api/order/place-order", null);
+                var value = (await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>()).Data;
+                return value;
             }
-            else
-            {
-                return "login";
-            }
+           return false;
         }
 
         private async Task<bool> IsUserAuthenticated()
