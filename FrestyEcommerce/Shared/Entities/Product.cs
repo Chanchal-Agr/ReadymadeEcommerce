@@ -15,7 +15,7 @@ namespace FrestyEcommerce.Shared.Entities
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
-        public List<Image> Images { get; set; } = new List<Image>();
+
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
         public int CategoryId { get; set; }

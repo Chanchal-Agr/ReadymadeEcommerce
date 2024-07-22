@@ -14,14 +14,14 @@ else
             {
                 <img class="media-img" src="@product.ImageUrl" alt="@product.Title image">
             }
-            else
+           @*  else
             {
                 <MudCarousel Class="mud-width-full" ItemsSource="@product.Images" Style="height:200px;">
                     <ItemTemplate>
                         <MudImage Src="@context.Data"></MudImage>
                     </ItemTemplate>
                 </MudCarousel>
-            }
+            } *@
         </div>
         <div class="media-body">
             <h2 class="mb-0">@product.Title</h2>
