@@ -7,7 +7,7 @@
 @inject NavigationManager NavigationManager
 
 <PageTitle>Shopping Cart</PageTitle>
-<h3>Shopping Cart</h3>
+<h3 class="text-center py-4 fw-bold">Shopping Cart</h3>
 
 @if (cartProducts == null || cartProducts.Count == 0)
 {
@@ -18,41 +18,71 @@ else
     <div>
         @foreach (var product in cartProducts)
         {
-            <div class="container">
-                <div class="image-wrapper">
-                    <img src="@product.ImageUrl" class="image" />
-                </div>
-                <div class="name">
-                    <h5><a href="/product/@product.ProductId">@product.Title</a></h5>
-                    <span>@product.ProductType</span><br />
-                    <input type="number" value="@product.Quantity"
-                           @onchange="@((ChangeEventArgs e) => UpdateQuantity(e,product))"
-                           class="form-control input-quantity"
-                           min="1" />
-                    <button class="btn-delete" @onclick="@(() =>
+            <div class="container shadow-sm p-3 mt-3">
+                <div class="row name">
+                   <div class="col-md-2">
+                        <div class="image-wrapper">
+                            <img src="@product.ImageUrl" class="image" />
+                        </div>
+                   </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h5><a href="/product/@product.ProductId">@product.Title</a></h5>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="cart-product-price float-end btn btn-primary py-2 px-4">₹@(product.Price)</div>
+                               
+                            </div>
+                            <div class="col-md-12">
+                                <span class="fw-bold p-1"> Size : @product.ProductType</span><br />
+                            </div>
+                            <div class="col-md-12">
+                                <input type="number" value="@product.Quantity"
+                                       @onchange="@((ChangeEventArgs e) => UpdateQuantity(e,product))"
+                                       class="form-control input-quantity"
+                                       min="1" />
+                            </div>
+                            <div class="col-md-2 col-lg-1">
+                                <button class="btn-delete btn btn-danger text-white" @onclick="@(() =>
                         RemovProductFromCart(product.ProductId, product.ProductTypeId))">
-                        Delete
-                    </button>
+                                    Delete
+                                </button>
+                            </div>
+                            <div class="col-md-2 col-lg-2">
+                                <div class="cart-product-price btn btn-primary py-1 px-3">₹@(product.Price * product.Quantity)</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="cart-product-price">₹@(product.Price * product.Quantity)</div>
+              
+               
+
             </div>
+         
         }
         <div class="cart-product-price">
+              <button class="btn-delete btn btn-success text-white">
             Total (@cartProducts.Count): ₹@cartProducts.Sum(product => @product.Price * product.Quantity)
+            </button>
         </div>
     </div>
     @if (isAuthenticated)
     {
-        <div>
-            <h5>Delivery Address</h5>
-            <AddressForm OnConfirm="OnAddressAdded" />
-
+        <div class="container shadow-sm p-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Delivery Address</h5>
+                    <AddressForm OnConfirm="OnAddressAdded" />
+                </div>
+            </div>
+          
         </div>
     }
 
     @if (Address != null)
     {
-        <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Place Order</button>
+        <button @onclick="PlaceOrder" class="btn alert-success btn-primary text-white float-end mt-1">Place Order</button>
     }
 
 }
