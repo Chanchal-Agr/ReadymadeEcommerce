@@ -3,3 +3,7 @@
     margin-right: 10px;
     transform: rotate(-3deg);
 }
+.top-row .logo-header {
+    width: 100px;
+    padding: 10px;
+}
